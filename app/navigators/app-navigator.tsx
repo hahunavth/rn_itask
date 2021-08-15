@@ -8,8 +8,10 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { WelcomeScreen, DemoScreen, DemoListScreen, TodoScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -25,16 +27,30 @@ import { navigationRef } from "./navigation-utilities"
  */
 export type NavigatorParamList = {
   welcome: undefined
-  demo: undefined
-  demoList: undefined
+  demo?: undefined
+  demoList?: undefined
+  todo?: undefined
+}
+
+export type BottomBarNavigatorParamList = {
+  home?: undefined
+  todo?: undefined
+  task?: undefined
+  info?: undefined
+  welcome: undefined
+  demo?: undefined
+  demoList?: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<NavigatorParamList>()
 
+const Tab = createBottomTabNavigator<BottomBarNavigatorParamList>()
+
 const AppStack = () => {
   return (
-    <Stack.Navigator
+    <>
+      {/* <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
@@ -43,7 +59,25 @@ const AppStack = () => {
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
       <Stack.Screen name="demoList" component={DemoListScreen} />
-    </Stack.Navigator>
+      <Stack.Screen name="todo" component={TodoScreen} />
+    </Stack.Navigator> */}
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Tab.Screen
+          name="todo"
+          component={TodoScreen}
+          options={{
+            tabBarLabel: "Home",
+          }}
+        />
+        <Tab.Screen name="welcome" component={WelcomeScreen} />
+        <Tab.Screen name="demo" component={DemoScreen} />
+        <Tab.Screen name="demoList" component={DemoListScreen} />
+      </Tab.Navigator>
+    </>
   )
 }
 
