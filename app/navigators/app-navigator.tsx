@@ -12,6 +12,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { WelcomeScreen, DemoScreen, DemoListScreen, TodoScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import TaskPages from "./tasks-navigator"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -68,7 +69,7 @@ const AppStack = () => {
       >
         <Tab.Screen
           name="todo"
-          component={TodoScreen}
+          component={TaskPages}
           options={{
             tabBarLabel: "Home",
           }}

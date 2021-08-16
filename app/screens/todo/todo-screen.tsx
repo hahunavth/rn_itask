@@ -1,4 +1,4 @@
-import React, { FC, createContext, useState } from "react"
+import React, { FC, createContext, useState, useEffect, useCallback } from "react"
 import { View, ViewStyle, TextStyle, ImageStyle, SafeAreaView } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
@@ -16,6 +16,13 @@ import {
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 import WeekCalendar from "../../components/week-calendar/WeekCalendar"
+import { useAppDispatch, useAppSelector } from "../../store/hooks"
+import { taskSelector, todaySelector } from "../../store/task/taskSlice"
+import { addDocument } from "../../firebase/services"
+import { db } from "../../firebase/config"
+import useFirestore from "../../firebase/useFirestore"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { TaskStackNavigatorParamList } from "../../navigators/tasks-navigator"
 
 const bowserLogo = require("../welcome/bowser.png")
 
@@ -127,7 +134,7 @@ export type TodoContextType = {
   setSelected?: () => undefined
 }
 
-export const TodoScreen: FC<StackScreenProps<NavigatorParamList, "todo">> = observer(
+export const TodoScreen: FC<StackScreenProps<TaskStackNavigatorParamList, "todo">> = observer(
   ({ navigation }) => {
     const curr = new Date()
     const day = (curr.getDay() + 6) % 7
@@ -141,8 +148,35 @@ export const TodoScreen: FC<StackScreenProps<NavigatorParamList, "todo">> = obse
     const [date, setDate] = useState(dateList)
     const [today, setToday] = useState(day)
     const [selected, setSelected] = useState(day)
+    const [tasks, setTasks] = useState([])
 
-    const nextScreen = () => navigation.navigate("demo")
+    // const dispatch = useAppDispatch()
+    // const today2 = useAppSelector(taskSelector)
+    // console.log(today2)
+
+    // const nextScreen = () => navigation.navigate("demo")
+    const addTask = async () => {
+      // await AsyncStorage.setItem(date[selected].toLocaleDateString(), JSON.stringify(["Task1"]))
+      // await AsyncStorage.removeItem(date[selected].toLocaleDateString())
+      // console.log(await AsyncStorage.getAllKeys())
+      navigation.navigate("addtask")
+    }
+
+    const getSelectedDateTasks = useCallback(async () => {
+      const taskString = await AsyncStorage.getItem(date[selected].toLocaleDateString())
+      const taskList = JSON.parse(taskString)
+      console.log(taskList)
+      setTasks([taskList])
+    }, [selected])
+
+    useEffect(() => {
+      getSelectedDateTasks()
+    }, [getSelectedDateTasks, selected])
+
+    // addDocument("Date", today)
+
+    // const user = useFirestore("Date", null)
+    // console.log(user)
 
     return (
       <TodoContext.Provider value={{ date, setDate, today, setToday, selected, setSelected }}>
@@ -160,11 +194,20 @@ export const TodoScreen: FC<StackScreenProps<NavigatorParamList, "todo">> = obse
                   style={CONTINUE}
                   textStyle={CONTINUE_TEXT}
                   tx="welcomeScreen.continue"
-                  onPress={nextScreen}
+                  onPress={addTask}
                 />
               </View>
             </View>
             <WeekCalendar />
+            <View>
+              {tasks.map((task) => {
+                return (
+                  <Text key={task} style={DAY_TEXT}>
+                    task {task}
+                  </Text>
+                )
+              })}
+            </View>
           </Screen>
         </View>
       </TodoContext.Provider>

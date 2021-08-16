@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "53558603978",
+    "project_id": "rn-itask",
+    "storage_bucket": "rn-itask.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53558603978:android:95d6b7b6d56edd48080433",
+        "android_client_info": {
+          "package_name": "com.rn_itask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53558603978-u9imss593dm2c8nkei13qe0g6e7g442p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxZ48XF6pJGtBcLde8hOciRLNbg2Lgm18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53558603978-u9imss593dm2c8nkei13qe0g6e7g442p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
