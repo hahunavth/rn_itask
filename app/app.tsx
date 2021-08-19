@@ -1,3 +1,7 @@
+import { StyleSheet } from "react-native"
+import { ApplicationProvider, IconRegistry, Layout } from "@ui-kitten/components"
+import { EvaIconsPack } from "@ui-kitten/eva-icons"
+import * as eva from "@eva-design/eva"
 /**
  * Welcome to the main entry point of the app. In this file, we'll
  * be kicking off our app.
@@ -24,7 +28,9 @@ import { ToggleStorybook } from "../storybook/toggle-storybook"
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from "react-native-screens"
 import { Provider } from "react-redux"
-import store from "./store"
+import store, { persistor } from "./store"
+import { PersistGate } from "redux-persist/integration/react"
+import { TodoScreen } from "./screens"
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
@@ -98,17 +104,40 @@ function App() {
   if (!rootStore || !isNavigationStateRestored) return null
 
   return (
-    <Provider store={store}>
-      <>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <AppNavigator
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
-        </SafeAreaProvider>
-      </>
-    </Provider>
+    <>
+      {/* <ToggleStorybook> */}
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <>
+            <IconRegistry icons={EvaIconsPack} />
+            <ApplicationProvider {...eva} theme={eva.light}>
+              <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+                <AppNavigator
+                  initialState={initialNavigationState}
+                  onStateChange={onNavigationStateChange}
+                />
+              </SafeAreaProvider>
+            </ApplicationProvider>
+          </>
+        </PersistGate>
+      </Provider>
+      {/* </ToggleStorybook> */}
+    </>
   )
 }
 
 export default App
+
+// const styles = StyleSheet.create({
+//   container: {
+//     alignItems: "center",
+//     flex: 1,
+//     justifyContent: "center",
+//   },
+//   text: {
+//     textAlign: "center",
+//   },
+//   likeButton: {
+//     marginVertical: 16,
+//   },
+// })

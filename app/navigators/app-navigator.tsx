@@ -13,6 +13,8 @@ import { WelcomeScreen, DemoScreen, DemoListScreen, TodoScreen } from "../screen
 import { navigationRef } from "./navigation-utilities"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import TaskPages from "./tasks-navigator"
+import TodoNavigator from "./todo-navigator"
+import { Icon } from "@ui-kitten/components"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -31,6 +33,7 @@ export type NavigatorParamList = {
   demo?: undefined
   demoList?: undefined
   todo?: undefined
+  task?: undefined
 }
 
 export type BottomBarNavigatorParamList = {
@@ -48,7 +51,7 @@ const Stack = createNativeStackNavigator<NavigatorParamList>()
 
 const Tab = createBottomTabNavigator<BottomBarNavigatorParamList>()
 
-const AppStack = () => {
+const AppTab = () => {
   return (
     <>
       {/* <Stack.Navigator
@@ -68,15 +71,71 @@ const AppStack = () => {
         }}
       >
         <Tab.Screen
-          name="todo"
+          name="task"
           component={TaskPages}
           options={{
             tabBarLabel: "Home",
+            tabBarIcon: function getTabarIcon({ focused, color, size }) {
+              return (
+                <MaterialCommunityIcons
+                  name={focused ? "home" : "home-outline"}
+                  size={size}
+                  color={color}
+                />
+              )
+            },
           }}
         />
-        <Tab.Screen name="welcome" component={WelcomeScreen} />
-        <Tab.Screen name="demo" component={DemoScreen} />
-        <Tab.Screen name="demoList" component={DemoListScreen} />
+        <Tab.Screen
+          name="todo"
+          component={TodoNavigator}
+          options={{
+            tabBarLabel: "Todo",
+            tabBarIcon: function getTabarIcon({ focused, color, size }) {
+              return (
+                <MaterialCommunityIcons
+                  name={focused ? "ballot" : "ballot-outline"}
+                  size={size}
+                  color={color}
+                />
+              )
+            },
+          }}
+        />
+        <Tab.Screen
+          name="demo"
+          component={DemoScreen}
+          options={{
+            tabBarLabel: "Project",
+            tabBarIcon: function getTabarIcon({ focused, color, size }) {
+              return (
+                <MaterialCommunityIcons
+                  // name="collage"
+                  name={focused ? "card-bulleted-settings" : "card-bulleted-settings-outline"}
+                  size={size}
+                  color={color}
+                />
+              )
+            },
+          }}
+        />
+
+        <Tab.Screen
+          name="demoList"
+          component={DemoListScreen}
+          options={{
+            tabBarLabel: "Project",
+            tabBarIcon: function getTabarIcon({ focused, color, size }) {
+              return (
+                <MaterialCommunityIcons
+                  name={focused ? "cog" : "cog-outline"}
+                  size={size}
+                  color={color}
+                />
+              )
+            },
+          }}
+        />
       </Tab.Navigator>
     </>
   )
@@ -92,7 +151,7 @@ export const AppNavigator = (props: NavigationProps) => {
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       {...props}
     >
-      <AppStack />
+      <AppTab />
     </NavigationContainer>
   )
 }
